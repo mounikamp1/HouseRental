@@ -1,0 +1,29 @@
+[
+  {
+    "houseName": "Brudhavan",
+    "address": "Main Center",
+    "location": "Main Bridge ",
+    "price": "999",
+    "rating": "5",
+    "photoUrl": "/images/1.jpeg",
+    "id": "1"
+  },
+  {
+    "houseName": "Vani's Nivan ",
+    "address": "slhflj",
+    "location": "gfjg",
+    "price": "555",
+    "rating": "4.9",
+    "photoUrl": "/images/2.jpg",
+    "id": "2"
+  },
+  {
+    "houseName": "Spring Home",
+    "address": "Rajpur",
+    "location": "UK",
+    "price": "853",
+    "rating": "5",
+    "photoUrl": "/images/5.jpeg",
+    "id": "0.07289196537616571"
+  }
+]
