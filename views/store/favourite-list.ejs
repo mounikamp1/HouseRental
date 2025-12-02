@@ -1,34 +1,69 @@
 <%- include('../partials/head') %>
-  <body>
+  <body class="bg-gray-50">
     <%- include('../partials/nav') %>
-    <main class="container mx-auto bg-white shadow-lg rounded-lg p-8 mt-10 max-w-6xl">
-      <h2 class="text-3xl text-red-500 font-bold text-center mb-6">
-        Here are your favourite homes:
-      </h2>
-    <div class="flex flex-wrap justify-center gap-6">
+    <main class="container mx-auto px-4 py-12">
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          ❤️ My Favourite Homes
+        </h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Your curated collection of properties you love
+        </p>
+      </div>
+
+      <!-- Properties Grid -->
+      <% if(favouriteHomes && favouriteHomes.length > 0) { %>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <% favouriteHomes.forEach(home => { %>
-          <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300 w-full max-w-sm">
-           <img src="<%= home.photoUrl %>" alt="Home photo">
-            <div class="p-4">
-              <h3 class="text-xl font-semibold text-gray-800 mb-2"><%= home.houseName %></h3>
-              <h3 class="text-xl font-semibold text-gray-800 mb-2"><%= home.address %></h3>
-              <p class="text-gray-600 mb-2"><i class="fas fa-map-marker-alt mr-2"></i><%= home.location %></p>
-              <div class="flex justify-between items-center mb-2">
-                <span class="text-lg font-bold text-red-500"> $ <%= home.price %> / night</span>
-                <div class="flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-yellow-400 mr-1">
-                    <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                  </svg>
-                  <span class="text-gray-700"><%= home.rating %></span>
+          <div class="bg-white rounded-2xl shadow-md hover:shadow-2xl transition duration-300 overflow-hidden transform hover:-translate-y-2 group">
+            <!-- Image Container -->
+            <div class="relative overflow-hidden h-64 bg-gray-200">
+              <img src="<%= home.photoUrl %>" alt="<%= home.houseName %>" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+              <div class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">⭐ <%= home.rating %>/5</div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-gray-900 mb-1"><%= home.houseName %></h3>
+              <p class="text-sm text-gray-600 mb-4 flex items-center gap-2">
+                <span>📍</span><%= home.address %>
+              </p>
+              
+              <div class="border-t border-b border-gray-200 py-4 mb-4">
+                <p class="text-sm text-gray-600 mb-2"><strong>Location:</strong> <%= home.location %></p>
+              </div>
+
+              <div class="flex justify-between items-center mb-6">
+                <div>
+                  <p class="text-sm text-gray-600">Starting from</p>
+                  <p class="text-3xl font-bold text-red-500">$<%= home.price %><span class="text-sm text-gray-600">/night</span></p>
                 </div>
               </div>
-               <form action="/favourites/delete/<%= home._id%>" method ="POST">
-                <button type="submit" class="bg-red-500 p-2 rounded-md">Remove From Favourite</button>
-              </form>
+
+              <!-- Action Buttons -->
+              <div class="space-y-2">
+                <a href="/homes/<%= home._id %>" class="block w-full bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold py-2.5 px-4 rounded-lg hover:from-red-600 hover:to-orange-600 transition duration-300 text-center shadow-md hover:shadow-lg">
+                  👁️ View Details
+                </a>
+                <form action="/favourites/delete/<%= home._id%>" method="POST">
+                  <button type="submit" class="w-full bg-red-100 text-red-600 font-bold py-2.5 px-4 rounded-lg hover:bg-red-200 transition duration-300">
+                    ❌ Remove from Favourites
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         <% }) %>
       </div>
+      <% } else { %>
+      <div class="text-center py-20">
+        <p class="text-2xl text-gray-600 mb-6">You haven't added any properties to your favourites yet.</p>
+        <a href="/homes" class="bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold py-3 px-8 rounded-lg hover:from-red-600 hover:to-orange-600 transition duration-300 shadow-lg hover:shadow-xl inline-block transform hover:scale-105 active:scale-100">
+          Browse Homes
+        </a>
+      </div>
+      <% } %>
     </main>
   </body>
 </html>

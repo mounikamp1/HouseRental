@@ -157,7 +157,7 @@
 // };
 // const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
-const favourite = require("./favourite");
+//const favourite = require("./favourite");
 const homeSchema = mongoose.Schema({
   houseName: { type: String, required: true },
   address: { type: String, required: true },
@@ -168,10 +168,10 @@ const homeSchema = mongoose.Schema({
   description: String,
 });
 
-homeSchema.pre("findOneAndDelete", async function (next) {
-  console.log("Aim to prehook while deleting a home");
-  const homeId = this.getQuery()._id;
-  await favourite.deleteMany({ houseId: homeId });
-  next();
-});
+// homeSchema.pre("findOneAndDelete", async function (next) {
+//   console.log("Aim to prehook while deleting a home");
+//   const homeId = this.getQuery()._id;
+//   await favourite.deleteMany({ houseId: homeId });
+//   next();
+// });
 module.exports = mongoose.model("Home", homeSchema);

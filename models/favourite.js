@@ -55,15 +55,15 @@
 //     return db.collection("favourites").deleteOne({ houseId: delHomeId });
 //   }
 // };
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 
-const favouriteSchema = new mongoose.Schema({
-  houseId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Home",
-    requried: true,
-    unique: true,
-  },
-});
+// const favouriteSchema = new mongoose.Schema({
+//   houseId: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: "Home",
+//     requried: true,
+//     unique: true,
+//   },
+// });
 
-module.exports = mongoose.model("Favourite", favouriteSchema);
+// module.exports = mongoose.model("Favourite", favouriteSchema);

@@ -1,14 +1,28 @@
 <%-include('partials/head') %>
-  <body>
+  <body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
     <%- include('partials/nav') %>
-    <main class="container mx-auto mt-20 text-center">
-      <h2 class="text-6xl font-bold text-red-500 mb-4">404</h2>
-      <p class="text-2xl text-gray-700 mb-8">Oops! Page Not Found</p>
-      <a
-        href="/"
-        class="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 transition duration-300"
-        >Go Back Home</a
-      >
+    <main class="min-h-screen flex items-center justify-center px-4">
+      <div class="text-center">
+        <div class="mb-8">
+          <span class="text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">404</span>
+        </div>
+        <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Oops! Page Not Found</h2>
+        <p class="text-lg text-gray-400 mb-8 max-w-md">We couldn't find the page you're looking for. Let's get you back on track.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a
+            href="/"
+            class="bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold py-3 px-8 rounded-lg hover:from-red-600 hover:to-orange-600 transition duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-100"
+          >
+            Go Back Home
+          </a>
+          <a
+            href="/homes"
+            class="border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white hover:text-red-600 transition duration-300 transform hover:scale-105 active:scale-100"
+          >
+            Browse Homes
+          </a>
+        </div>
+      </div>
     </main>
   </body>
 </html>

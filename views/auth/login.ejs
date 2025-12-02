@@ -1,29 +1,90 @@
 <%- include('../partials/head') %>
-<body>
+<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
   <%- include('../partials/nav') %>
-  <main class="container mx-auto mt-8 p-8 bg-white rounded-lg shadow-md">
-    <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">
-      Login
-    </h1>
-    <form action="/login" method="POST" class="max-w-md mx-auto">
+  <main class="min-h-screen flex items-center justify-center px-4 py-8 md:py-12">
+    <div class="w-full max-w-md">
+      <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-10">
+        <!-- Header -->
+        <div class="mb-8">
+          <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2 text-center">Welcome Back</h1>
+          <p class="text-center text-gray-600 text-sm">Sign in to your account</p>
+        </div>
 
-      <input
-       type="text"
-        name="username" 
-        placeholder="Email/Username" 
-        required
-        class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"/>
-        
-      <input 
-      type="password" 
-      name="password" 
-      placeholder="Enter Your Password " 
-      class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" required/>
-      
-      <button type="submit" class="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300">
-        Sign In
-      </button>
-    </form>
+        <form action="/login" method="POST" class="space-y-5">
+          <%- include('../partials/errors') %>
+          <!-- Username -->
+          <div>
+            <label for="username" class="block text-sm font-semibold text-gray-800 mb-2">Email or Username</label>
+            <input
+              type="email"
+              id="username"
+              name="email" 
+              placeholder="your@email.com" 
+              value="<%=oldInput.email? oldInput.email : '' %>"
+              required
+              class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition duration-200 text-gray-900"/>
+          </div>
+
+          <!-- Password -->
+          <div>
+            <label for="password" class="block text-sm font-semibold text-gray-800 mb-2">Password</label>
+            <input 
+              type="password" 
+              id="password"
+              name="password" 
+              placeholder="Enter your password" 
+              class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition duration-200 text-gray-900" 
+              required/>
+          </div>
+
+          <!-- Remember Me -->
+          <div class="flex items-center justify-between text-sm">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" class="w-4 h-4 text-red-500 rounded accent-red-500" />
+              <span class="text-gray-700">Remember me</span>
+            </label>
+            <a href="#" class="text-red-500 hover:text-red-600 font-medium">Forgot password?</a>
+          </div>
+
+          <!-- Submit Button -->
+          <button 
+            type="submit" 
+            class="w-full bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold py-3 px-4 rounded-lg hover:from-red-600 hover:to-orange-600 transition duration-300 shadow-lg hover:shadow-xl mt-8 transform hover:scale-105 active:scale-100">
+            Sign In
+          </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="relative my-6">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-white text-gray-500">or</span>
+          </div>
+        </div>
+
+        <!-- Social Login -->
+        <div class="grid grid-cols-2 gap-3">
+          <button type="button" class="flex items-center justify-center gap-2 px-4 py-2.5 border-2 border-gray-200 rounded-lg hover:border-gray-300 transition duration-200 text-gray-700 font-medium text-sm">
+            <span>🔵</span> Google
+          </button>
+          <button type="button" class="flex items-center justify-center gap-2 px-4 py-2.5 border-2 border-gray-200 rounded-lg hover:border-gray-300 transition duration-200 text-gray-700 font-medium text-sm">
+            <span>f</span> Facebook
+          </button>
+        </div>
+
+        <!-- Sign Up Link -->
+        <div class="text-center mt-8 pt-6 border-t border-gray-200">
+          <p class="text-gray-700 text-sm">
+            Don't have an account? 
+            <a href="/signup" class="font-bold text-red-500 hover:text-red-600 transition duration-200">
+              Sign Up
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
   </main>
 </body>
 </html>

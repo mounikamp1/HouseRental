@@ -1,44 +1,67 @@
 <%- include('../partials/head') %>
-  <body>
+  <body class="bg-gray-50">
     <%- include('../partials/nav') %>
-    <main class="container mx-auto bg-white shadow-lg rounded-lg p-8 mt-10 max-w-6xl">
-      <h2 class="text-3xl text-red-500 font-bold text-center mb-6">
-              Details of <%= home.houseName %>
-          </h2>
+    <main class="container mx-auto px-4 py-12">
+      <!-- Back Button -->
+      <a href="/homes" class="inline-flex items-center gap-2 text-red-500 hover:text-red-600 font-semibold mb-8 transition duration-300">
+        ← Back to Listings
+      </a>
 
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div class="rounded-lg overflow-hidden">
-                  <img src="<%= home.photoUrl %>" alt="<%= home.name %>" class="w-full h-96 object-cover">
-              </div>
-                  <div class="space-y-6">
-                  <div class="border-b pb-4">
-                      <h3 class="text-2xl font-semibold mb-2">Description</h3>
-                      <p class="text-gray-600"><%= home.address %></p>
-                  </div>
-                  <div class="border-b pb-4">
-                      <h3 class="text-2xl font-semibold mb-2">Location</h3>
-                      <p class="text-gray-600"><%= home.location %></p>
-                  </div>
-                  <div class="border-b pb-4">
-                      <h3 class="text-2xl font-semibold mb-2">Price</h3>
-                      <p class="text-green-600 text-xl font-bold">$<%= home.price %> / night</p>
-                  </div>
-                  
-                  <div class="border-b pb-4">
-                      <h3 class="text-2xl font-semibold mb-2">Rating</h3>
-                      <div class="flex items-center">
-                          <span class="text-yellow-400 text-xl">★</span>
-                          <span class="ml-2 text-lg"><%= home.rating %> / 5</span>
-                      </div>
-                  </div>
-                  <div class="mt-2">
-                  <%- include('../partials/favourite') %>
-                  </div>
-                    </form>
-                  </div>
-              </div>
+      <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 md:p-12">
+          <!-- Image Section -->
+          <div class="flex flex-col">
+            <div class="rounded-xl overflow-hidden h-96 md:h-full bg-gray-200 mb-4">
+              <img src="<%= home.photoUrl %>" alt="<%= home.houseName %>" class="w-full h-full object-cover">
+            </div>
           </div>
-      </main>
+
+          <!-- Details Section -->
+          <div class="space-y-8">
+            <!-- Header -->
+            <div>
+              <h1 class="text-4xl font-bold text-gray-900 mb-2"><%= home.houseName %></h1>
+              <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 text-lg">
+                  <span class="text-2xl">⭐</span>
+                  <span class="font-bold text-gray-900"><%= home.rating %>/5</span>
+                </div>
+                <span class="text-gray-600">|</span>
+                <span class="text-gray-600 flex items-center gap-2">
+                  <span>📍</span><%= home.location %>
+                </span>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div>
+              <h3 class="text-2xl font-bold text-gray-900 mb-3">About This Property</h3>
+              <p class="text-gray-700 leading-relaxed"><%= home.address %></p>
+            </div>
+
+            <!-- Location Info -->
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+              <h3 class="text-lg font-bold text-gray-900 mb-2">📍 Location Details</h3>
+              <p class="text-gray-700"><%= home.location %></p>
+            </div>
+
+            <!-- Price Card -->
+            <div class="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-6">
+              <p class="text-sm text-gray-600 mb-1">Price per night</p>
+              <p class="text-4xl font-bold text-red-600 mb-4">$<%= home.price %></p>
+              <button class="w-full bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold py-3 px-6 rounded-lg hover:from-red-600 hover:to-orange-600 transition duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-100">
+                🔖 Book Now
+              </button>
+            </div>
+
+            <!-- Favorite Button -->
+            <div class="border-t pt-6">
+              <%- include('../partials/favourite',{home:home}) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
   </body>
 </html>
 
