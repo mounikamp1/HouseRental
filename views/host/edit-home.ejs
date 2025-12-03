@@ -19,7 +19,7 @@
 
     <!-- Form Container -->
     <div class="bg-white rounded-2xl shadow-lg overflow-hidden max-w-4xl mx-auto">
-      <form action="/host/<%= editing ? "edit-home" : "add-home"%>" method="POST" class="p-8 md:p-12">
+      <form action="/host/<%= editing ? "edit-home" : "add-home"%>" method="POST" enctype="multipart/form-data" class="p-8 md:p-12">
         <input
           type="hidden"
           name="id"  
@@ -107,12 +107,11 @@
           <div class="space-y-6">
             <!-- Description -->
             <div>
-              <label for="description" class="block text-sm font-semibold text-gray-800 mb-2">Description *</label>
+              <label for="description" class="block text-sm font-semibold text-gray-800 mb-2">Description</label>
               <textarea
                 id="description"
                 name="description"  
                 placeholder="Write a compelling description of your property... (amenities, style, nearby attractions, etc.)" 
-                required
                 rows="6"
                 class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition duration-200 text-gray-900 placeholder-gray-400 font-medium resize-none"><%= editing ? home.description : ''%></textarea>
               <p class="text-xs text-gray-500 mt-1">Minimum 50 characters recommended</p>
@@ -120,24 +119,23 @@
 
             <!-- Photo URL -->
             <div>
-              <label for="photoUrl" class="block text-sm font-semibold text-gray-800 mb-2">Photo URL *</label>
+              <label for="photo" class="block text-sm font-semibold text-gray-800 mb-2">Photo URL </label>
               <input 
-                type="url"
-                id="photoUrl"
-                name="photoUrl"
-                value="<%= editing ? home.photoUrl : ''%>" 
-                placeholder="https://example.com/photo.jpg" 
-                required
+                type="file"
+                id="photo"
+                name="photo"
+                multiple
+                accept="image/*"
                 class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition duration-200 text-gray-900 placeholder-gray-400 font-medium"/>
               <p class="text-xs text-gray-500 mt-1">Use a direct link to your property photo</p>
             </div>
 
             <!-- Photo Preview -->
-            <% if(editing && home.photoUrl) { %>
+            <% if(editing && home.photo) { %>
             <div>
               <label class="block text-sm font-semibold text-gray-800 mb-2">Photo Preview</label>
               <div class="rounded-lg overflow-hidden border-2 border-gray-200 h-48 bg-gray-100">
-                <img src="<%= home.photoUrl %>" alt="Property preview" class="w-full h-full object-cover">
+                <img src="<%= home.photo %>" alt="Property preview" class="w-full h-full object-cover">
               </div>
             </div>
             <% } %>

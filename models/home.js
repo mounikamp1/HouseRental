@@ -16,7 +16,7 @@
 //     location,
 //     price,
 //     rating,
-//     photoUrl,
+//     photo,
 //     description,
 //     _id
 //   ) {
@@ -25,7 +25,7 @@
 //     this.location = location;
 //     this.price = price;
 //     this.rating = rating;
-//     this.photoUrl = photoUrl;
+//     this.photo = photo;
 //     this.description = description;
 //     if (_id) {
 //       this._id = _id;
@@ -73,14 +73,14 @@
 //   //     //update
 //   //     if (this.id) {
 //   //       return db.execute(
-//   //         "UPDATE homes SET houseName=?,address=?,location=?,price=?,rating=?,photoUrl=?,description=? WHERE id=?",
+//   //         "UPDATE homes SET houseName=?,address=?,location=?,price=?,rating=?,photo=?,description=? WHERE id=?",
 //   //         [
 //   //           this.houseName,
 //   //           this.address,
 //   //           this.location,
 //   //           this.price,
 //   //           this.rating,
-//   //           this.photoUrl,
+//   //           this.photo,
 //   //           this.description,
 //   //           this.id,
 //   //         ]
@@ -88,14 +88,14 @@
 //   //     } else {
 //   //       //add
 //   //       return db.execute(
-//   //         "INSERT INTO homes (houseName,address,location,price,rating,photoUrl,description) VALUES(?,?,?,?,?,?,?)",
+//   //         "INSERT INTO homes (houseName,address,location,price,rating,photo,description) VALUES(?,?,?,?,?,?,?)",
 //   //         [
 //   //           this.houseName,
 //   //           this.address,
 //   //           this.location,
 //   //           this.price,
 //   //           this.rating,
-//   //           this.photoUrl,
+//   //           this.photo,
 //   //           this.description,
 //   //         ]
 //   //       );
@@ -122,7 +122,7 @@
 //         location: this.location,
 //         price: this.price,
 //         rating: this.rating,
-//         photoUrl: this.photoUrl,
+//         photo: this.photo,
 //         description: this.description,
 //       };
 //       return db
@@ -164,7 +164,7 @@ const homeSchema = mongoose.Schema({
   location: { type: String, required: true },
   price: { type: Number, required: true },
   rating: { type: Number, required: true },
-  photoUrl: String,
+  photo: String,
   description: String,
 });
 

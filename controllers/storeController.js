@@ -1,7 +1,11 @@
 //const Favourite = require("../models/favourite");
-const home = require("../models/home");
+// const { root } = require("postcss");
+// const home = require("../models/home");
 const Home = require("../models/home");
 const User = require("../models/user");
+const fs = require("fs");
+const path = require("path");
+const rootDir = require("../util/pathUtil");
 
 exports.getIndex = (req, res, next) => {
   console.log("Session value:", req.session);
@@ -99,3 +103,23 @@ exports.getHomeDetails = (req, res, next) => {
     }
   });
 };
+
+exports.getHouseRules = [
+  (req, res, next) => {
+    if (!req.session.isLoggedIn) {
+      return res.redirect("/login");
+    }
+    next();
+  },
+  (req, res, next) => {
+    const homeId = req.params.homeId;
+    const masterFile = path.join(rootDir, "rules", "house-rules.pdf");
+
+    if (!fs.existsSync(masterFile)) {
+      return res.status(404).send("Master house rules PDF not found.");
+    }
+
+    // Serve the same PDF dynamically with home-specific download name
+    res.download(masterFile, `House-Rules-${homeId}.pdf`);
+  },
+];

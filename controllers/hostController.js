@@ -1,4 +1,5 @@
 const Home = require("../models/home");
+const fs = require("fs");
 
 exports.getAddHome = (req, res, next) => {
   res.render("host/edit-home", {
@@ -42,15 +43,20 @@ exports.getHostHomes = (req, res, next) => {
 };
 
 exports.postAddHome = (req, res, next) => {
-  const { houseName, address, location, price, rating, photoUrl, description } =
-    req.body;
+  const { houseName, address, location, price, rating, description } = req.body;
+  console.log(houseName, address, location, price, rating, description);
+  console.log(req.file);
+  if (!req.file) {
+    return res.status(422).send("No Image uploaded or invalid file type");
+  }
+  const photo = req.file.path;
   const home = new Home({
     houseName,
     address,
     location,
     price,
     rating,
-    photoUrl,
+    photo,
     description,
   });
   home.save().then(() => {
@@ -67,7 +73,7 @@ exports.postAddHome = (req, res, next) => {
 //     location,
 //     price,
 //     rating,
-//     photoUrl,
+//     photo,
 //     description,
 //   } = req.body;
 //   Home.findById(id).then((home) => {
@@ -76,7 +82,7 @@ exports.postAddHome = (req, res, next) => {
 //     home.location = location;
 //     home.price = price;
 //     home.rating = rating;
-//     home.photoUrl = photoUrl;
+//     home.photo = photo;
 //     home.description = description;
 //   });
 //   // const home = new Home(
@@ -85,7 +91,7 @@ exports.postAddHome = (req, res, next) => {
 //   //   location,
 //   //   price,
 //   //   rating,
-//   //   photoUrl,
+//   //   photo,
 //   //   description,
 //   //   id
 //   // );
@@ -100,16 +106,9 @@ exports.postAddHome = (req, res, next) => {
 //   });
 // };
 exports.postEditHome = (req, res, next) => {
-  const {
-    id,
-    houseName,
-    address,
-    location,
-    price,
-    rating,
-    photoUrl,
-    description,
-  } = req.body;
+  const { id, houseName, address, location, price, rating, description } =
+    req.body;
+
   Home.findById(id)
     .then((home) => {
       home.houseName = houseName;
@@ -117,8 +116,15 @@ exports.postEditHome = (req, res, next) => {
       home.price = price;
       home.location = location;
       home.rating = rating;
-      home.photoUrl = photoUrl;
       home.description = description;
+      if (req.file) {
+        fs.unlink(home.photo, (err) => {
+          if (err) {
+            console.log("Error while deleting old photo ", err);
+          }
+        });
+        home.photo = req.file.path;
+      }
       home
         .save()
         .then((result) => {

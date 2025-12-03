@@ -5,7 +5,7 @@
     "location": "Main Bridge ",
     "price": "999",
     "rating": "5",
-    "photoUrl": "/images/1.jpeg",
+    "photo": "/images/1.jpeg",
     "id": "1"
   },
   {
@@ -14,7 +14,7 @@
     "location": "gfjg",
     "price": "555",
     "rating": "4.9",
-    "photoUrl": "/images/2.jpg",
+    "photo": "/images/2.jpg",
     "id": "2"
   },
   {
@@ -23,7 +23,7 @@
     "location": "UK",
     "price": "853",
     "rating": "5",
-    "photoUrl": "/images/5.jpeg",
+    "photo": "/images/5.jpeg",
     "id": "0.07289196537616571"
   }
 ]
