@@ -113,6 +113,7 @@ exports.postSignup = [
           password: hashedPassword,
           userType,
         });
+        console.log("New User Registered:", newUser);
         return newUser.save();
       })
       .then(() => {
@@ -127,8 +128,6 @@ exports.postSignup = [
           oldInput: { firstName, lastName, email, password, userType, terms },
         });
       });
-
-    console.log("New User Registered:", newUser);
     // res.cookie("isLoggedIn", true);
     //req.session.isLoggedIn = true;
     //req.isLoggedIn = true;

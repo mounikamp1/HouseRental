@@ -1,5 +1,6 @@
 //core module
 const path = require("path");
+require("dotenv").config();
 //external modules
 const express = require("express");
 const session = require("express-session");
@@ -96,7 +97,7 @@ app.use("/host", hostRouter);
 
 app.use(errorsController.pageNotFound);
 
-const PORT = 3000;
+const PORT = process.env.PORT || 5000;
 // mongoConnect(() => {
 //   app.listen(PORT, () => {
 //     console.log(`Server is running on port ${PORT}`);
