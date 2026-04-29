@@ -31,3 +31,6 @@ uploads/
 # Build
 dist/
 build/
+
+# Backup files
+*.backup

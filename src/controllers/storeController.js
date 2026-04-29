@@ -5,7 +5,7 @@ const Home = require("../models/home");
 const User = require("../models/user");
 const fs = require("fs");
 const path = require("path");
-const rootDir = require("../util/pathUtil");
+const rootDir = require("../utils/pathUtil");
 
 exports.getIndex = (req, res, next) => {
   console.log("Session value:", req.session);

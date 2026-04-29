@@ -1,28 +1,75 @@
-<%-include('../partials/head') %>
-  <body class="bg-gray-50">
-    <%- include('../partials/nav') %>
-    <main class="container mx-auto px-4 py-12">
-      <!-- Header -->
-      <div class="text-center mb-12">
-        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          📅 My Bookings
-        </h2>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          Manage and track all your property reservations
-        </p>
-      </div>
+<%- include('../partials/head') %>
+<body class="bg-gray-50">
+  <%- include('../partials/nav') %>
+  <main class="container mx-auto px-4 py-12">
 
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">📅 My Bookings</h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">Manage and track all your property reservations</p>
+    </div>
+
+    <% if (locals.serviceError) { %>
+      <div class="bg-yellow-50 border-2 border-yellow-400 rounded-xl p-6 mb-8 text-center">
+        <p class="text-yellow-800 font-semibold">⚠️ Booking service is temporarily unavailable. Please try again later.</p>
+      </div>
+    <% } %>
+
+    <% if (!bookings || bookings.length === 0) { %>
       <!-- Empty State -->
       <div class="bg-white rounded-2xl shadow-lg p-12 text-center max-w-2xl mx-auto">
         <div class="text-6xl mb-6">🏖️</div>
         <h3 class="text-2xl font-bold text-gray-900 mb-4">No Bookings Yet</h3>
-        <p class="text-lg text-gray-600 mb-8">
-          You haven't made any bookings yet. Explore our amazing properties and book your next stay!
-        </p>
-        <a href="/homes" class="inline-block bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold py-3 px-8 rounded-lg hover:from-red-600 hover:to-orange-600 transition duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-100">
+        <p class="text-lg text-gray-600 mb-8">Explore our amazing properties and book your next stay!</p>
+        <a href="/homes" class="inline-block bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold py-3 px-8 rounded-lg hover:from-red-600 hover:to-orange-600 transition duration-300 shadow-lg">
           🔍 Browse Properties
         </a>
       </div>
-    </main>
-  </body>
+    <% } else { %>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% bookings.forEach(booking => { %>
+          <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+            <!-- Status Banner -->
+            <div class="px-6 py-3 <%
+              if (booking.status === 'CONFIRMED')  { %>bg-green-500<%
+              } else if (booking.status === 'PENDING')  { %>bg-yellow-500<%
+              } else if (booking.status === 'CANCELLED') { %>bg-gray-400<%
+              } else if (booking.status === 'COMPLETED') { %>bg-blue-500<%
+              } else { %>bg-gray-400<% } %>
+            ">
+              <span class="text-white font-bold text-sm"><%= booking.status %></span>
+            </div>
+
+            <div class="p-6">
+              <!-- Home name or ID -->
+              <h3 class="text-lg font-bold text-gray-900 mb-1 truncate">
+                🏠 Home ID: <%= booking.homeId.slice(-6).toUpperCase() %>
+              </h3>
+
+              <!-- Dates -->
+              <div class="text-sm text-gray-600 space-y-1 mb-4">
+                <p>📆 Check-in:  <span class="font-semibold text-gray-800"><%= new Date(booking.checkIn).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) %></span></p>
+                <p>📆 Check-out: <span class="font-semibold text-gray-800"><%= new Date(booking.checkOut).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) %></span></p>
+                <p>🌙 <span class="font-semibold"><%= booking.numberOfNights %></span> nights · 👥 <span class="font-semibold"><%= booking.guests %></span> guests</p>
+              </div>
+
+              <!-- Price -->
+              <div class="bg-red-50 border border-red-200 rounded-xl px-4 py-2 mb-4">
+                <p class="text-sm text-gray-500">Total</p>
+                <p class="text-xl font-bold text-red-600">$<%= booking.totalPrice.toFixed(2) %></p>
+              </div>
+
+              <!-- Actions -->
+              <a href="/bookings/<%= booking.id %>"
+                class="block text-center bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold py-2 px-4 rounded-lg hover:from-red-600 hover:to-orange-600 transition duration-300">
+                View Details →
+              </a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+  </main>
+</body>
 </html>

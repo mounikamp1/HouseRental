@@ -1,0 +1,11 @@
+node_modules
+npm-debug.log
+.env
+.git
+.gitignore
+uploads/*
+!uploads/.gitkeep
+docs/screenshots
+*.md
+booking-service
+take-screenshots.ps1

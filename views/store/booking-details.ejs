@@ -1,0 +1,203 @@
+<%-include('../partials/head') %>
+  <body class="bg-gradient-to-br from-gray-50 via-orange-50 to-gray-50 min-h-screen">
+    <%- include('../partials/nav') %>
+    <main class="container mx-auto px-4 py-12">
+      <!-- Back Button -->
+      <a href="/bookings" class="inline-flex items-center gap-2 text-red-500 hover:text-red-600 font-semibold mb-8 transition duration-300">
+        ← Back to My Bookings
+      </a>
+
+      <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-red-500 via-orange-500 to-red-500 text-white rounded-3xl shadow-2xl p-8 mb-8">
+          <div class="flex items-center justify-between mb-4">
+            <h1 class="text-3xl font-bold">Booking Details</h1>
+            <span class="px-4 py-2 rounded-full text-sm font-bold
+              <% if (booking.status === 'CONFIRMED') { %>
+                bg-green-500
+              <% } else if (booking.status === 'PENDING') { %>
+                bg-yellow-500
+              <% } else if (booking.status === 'CANCELLED') { %>
+                bg-gradient-to-br from-gray-50 via-orange-50 to-gray-50 min-h-screen0
+              <% } else if (booking.status === 'COMPLETED') { %>
+                bg-blue-500
+              <% } else { %>
+                bg-gradient-to-br from-gray-50 via-orange-50 to-gray-50 min-h-screen0
+              <% } %>
+            ">
+              <%= booking.status %>
+            </span>
+          </div>
+          <p class="text-lg opacity-90">Booking ID: <%= booking.id %></p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Property Information -->
+          <div class="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-300 p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <span>🏠</span> Property
+            </h2>
+            
+            <% if (home) { %>
+              <div class="rounded-xl overflow-hidden mb-4">
+                <img src="/<%= home.photo.replace(/\\\\/g, '/') %>" alt="<%= home.houseName %>" class="w-full h-48 object-cover">
+              </div>
+              <h3 class="text-xl font-bold text-gray-900 mb-2"><%= home.houseName %></h3>
+              <p class="text-gray-600 flex items-center gap-2 mb-4">
+                <span>📍</span><%= home.location %>
+              </p>
+              <a href="/homes/<%= home._id %>" class="inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
+                View Property
+              </a>
+            <% } else { %>
+              <p class="text-gray-600">Property ID: <%= booking.homeId %></p>
+            <% } %>
+          </div>
+
+          <!-- Booking Information -->
+          <div class="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-300 p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <span>📅</span> Stay Details
+            </h2>
+            
+            <div class="space-y-4">
+              <div class="flex items-start gap-3">
+                <span class="text-2xl">📆</span>
+                <div>
+                  <p class="text-sm text-gray-600">Check-in</p>
+                  <p class="font-bold text-gray-900">
+                    <%= new Date(booking.checkIn).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-3">
+                <span class="text-2xl">📆</span>
+                <div>
+                  <p class="text-sm text-gray-600">Check-out</p>
+                  <p class="font-bold text-gray-900">
+                    <%= new Date(booking.checkOut).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-3">
+                <span class="text-2xl">🌙</span>
+                <div>
+                  <p class="text-sm text-gray-600">Duration</p>
+                  <p class="font-bold text-gray-900"><%= booking.numberOfNights %> nights</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-3">
+                <span class="text-2xl">👥</span>
+                <div>
+                  <p class="text-sm text-gray-600">Guests</p>
+                  <p class="font-bold text-gray-900"><%= booking.guests %> guests</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest Information -->
+        <div class="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-300 p-8 mt-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <span>👤</span> Guest Information
+          </h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <p class="text-sm text-gray-600">Name</p>
+              <p class="font-bold text-gray-900"><%= booking.guestName %></p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Email</p>
+              <p class="font-bold text-gray-900"><%= booking.guestEmail %></p>
+            </div>
+            <% if (booking.guestPhone) { %>
+              <div>
+                <p class="text-sm text-gray-600">Phone</p>
+                <p class="font-bold text-gray-900"><%= booking.guestPhone %></p>
+              </div>
+            <% } %>
+          </div>
+
+          <% if (booking.specialRequests) { %>
+            <div class="mt-6 bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <p class="text-sm text-gray-600 mb-1">Special Requests</p>
+              <p class="text-gray-900"><%= booking.specialRequests %></p>
+            </div>
+          <% } %>
+        </div>
+
+        <!-- Price Breakdown -->
+        <div class="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-300 p-8 mt-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <span>💰</span> Price Breakdown
+          </h2>
+          
+          <div class="space-y-3">
+            <div class="flex justify-between text-gray-700">
+              <span>$<%= booking.pricePerNight.toFixed(2) %> × <%= booking.numberOfNights %> nights</span>
+              <span>$<%= (booking.pricePerNight * booking.numberOfNights).toFixed(2) %></span>
+            </div>
+            <div class="border-t-2 border-gray-200 pt-3 flex justify-between text-xl font-bold">
+              <span>Total</span>
+              <span class="text-red-600">$<%= booking.totalPrice.toFixed(2) %></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timestamps -->
+        <div class="bg-gray-100 rounded-2xl p-6 mt-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+            <div>
+              <span class="font-semibold">Booked on:</span> 
+              <%= new Date(booking.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %>
+            </div>
+            <div>
+              <span class="font-semibold">Last updated:</span> 
+              <%= new Date(booking.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <% if (booking.status === 'PENDING' || booking.status === 'CONFIRMED') { %>
+          <div class="flex gap-4 mt-8">
+            <button onclick="cancelBooking()" class="flex-1 bg-red-500 text-white font-bold py-4 px-6 rounded-lg hover:bg-red-600 transition duration-300 shadow-lg hover:shadow-xl">
+              ❌ Cancel Booking
+            </button>
+          </div>
+        <% } %>
+      </div>
+    </main>
+
+    <script>
+      function cancelBooking() {
+        if (!confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) {
+          return;
+        }
+
+        fetch('/booking/cancel/<%= booking.id %>', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('✅ Booking cancelled successfully!');
+            window.location.reload();
+          } else {
+            alert('❌ Error: ' + data.error);
+          }
+        })
+        .catch(error => {
+          alert('Failed to cancel booking. Please try again.');
+          console.error(error);
+        });
+      }
+    </script>
+  </body>
+</html>

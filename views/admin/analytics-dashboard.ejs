@@ -1,0 +1,141 @@
+﻿<%-include('../partials/head') %>
+<body class="bg-gradient-to-br from-gray-50 via-blue-50 to-gray-50 min-h-screen">
+  <%- include('../partials/nav') %>
+  
+  <main class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">📊 Analytics Dashboard</h1>
+      <p class="text-gray-600">Business intelligence and performance metrics</p>
+    </div>
+
+    <!-- Stats Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <!-- Total Properties -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition-all duration-300">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm font-medium">Total Properties</p>
+            <p class="text-3xl font-bold text-blue-600 mt-2"><%= stats.properties.total %></p>
+          </div>
+          <div class="bg-blue-100 rounded-full p-4">
+            <span class="text-3xl">🏠</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Users -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition-all duration-300">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm font-medium">Total Users</p>
+            <p class="text-3xl font-bold text-green-600 mt-2"><%= stats.users.total %></p>
+            <p class="text-xs text-gray-500 mt-1">Guests: <%= stats.users.guests %> | Hosts: <%= stats.users.hosts %></p>
+          </div>
+          <div class="bg-green-100 rounded-full p-4">
+            <span class="text-3xl">👥</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Bookings -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition-all duration-300">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm font-medium">Total Bookings</p>
+            <p class="text-3xl font-bold text-purple-600 mt-2"><%= stats.bookings.total %></p>
+            <p class="text-xs text-gray-500 mt-1">Confirmed: <%= stats.bookings.confirmed %> | Pending: <%= stats.bookings.pending %></p>
+          </div>
+          <div class="bg-purple-100 rounded-full p-4">
+            <span class="text-3xl">📅</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Revenue -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition-all duration-300">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm font-medium">Total Revenue</p>
+            <p class="text-3xl font-bold text-red-600 mt-2">\$<%= stats.revenue.total.toFixed(2) %></p>
+            <p class="text-xs text-gray-500 mt-1">Avg: \$<%= stats.revenue.average.toFixed(2) %> per booking</p>
+          </div>
+          <div class="bg-red-100 rounded-full p-4">
+            <span class="text-3xl">💰</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking Status Breakdown -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">📈 Booking Status Breakdown</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="text-center p-4 bg-green-50 rounded-xl">
+          <p class="text-sm text-gray-600">Confirmed</p>
+          <p class="text-2xl font-bold text-green-600"><%= stats.bookings.confirmed %></p>
+        </div>
+        <div class="text-center p-4 bg-yellow-50 rounded-xl">
+          <p class="text-sm text-gray-600">Pending</p>
+          <p class="text-2xl font-bold text-yellow-600"><%= stats.bookings.pending %></p>
+        </div>
+        <div class="text-center p-4 bg-blue-50 rounded-xl">
+          <p class="text-sm text-gray-600">Completed</p>
+          <p class="text-2xl font-bold text-blue-600"><%= stats.bookings.completed %></p>
+        </div>
+        <div class="text-center p-4 bg-red-50 rounded-xl">
+          <p class="text-sm text-gray-600">Cancelled</p>
+          <p class="text-2xl font-bold text-red-600"><%= stats.bookings.cancelled %></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Performing Properties -->
+    <div class="bg-white rounded-2xl shadow-lg p-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">🏆 Top Performing Properties</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b">
+              <th class="text-left py-3 px-4 font-semibold text-gray-700">Property</th>
+              <th class="text-left py-3 px-4 font-semibold text-gray-700">Location</th>
+              <th class="text-center py-3 px-4 font-semibold text-gray-700">Bookings</th>
+              <th class="text-right py-3 px-4 font-semibold text-gray-700">Revenue</th>
+              <th class="text-center py-3 px-4 font-semibold text-gray-700">Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (propertyPerformance.length === 0) { %>
+              <tr>
+                <td colspan="5" class="text-center py-8 text-gray-500">No property data available</td>
+              </tr>
+            <% } else { %>
+              <% propertyPerformance.forEach((property, index) => { %>
+                <tr class="border-b hover:bg-gray-50 transition-colors">
+                  <td class="py-3 px-4">
+                    <div class="flex items-center gap-2">
+                      <span class="font-bold text-gray-400"><%= index + 1 %></span>
+                      <span class="font-medium"><%= property.name %></span>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4 text-gray-600"><%= property.location %></td>
+                  <td class="py-3 px-4 text-center">
+                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
+                      <%= property.totalBookings %>
+                    </span>
+                  </td>
+                  <td class="py-3 px-4 text-right font-bold text-green-600">\$<%= property.revenue.toFixed(2) %></td>
+                  <td class="py-3 px-4 text-center">
+                    <span class="text-yellow-500">⭐</span>
+                    <span class="font-semibold"><%= property.rating %></span>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

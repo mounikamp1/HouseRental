@@ -1,99 +1,31 @@
-<header
-  class="bg-gradient-to-r from-red-600 to-orange-600 text-white shadow-lg sticky top-0 z-50"
->
-  <nav
-    class="container mx-auto px-4 py-4 md:py-5 flex justify-between items-center"
-  >
-    <!-- Logo -->
+<header class="bg-gradient-to-r from-red-600 to-orange-600 text-white shadow-lg sticky top-0 z-50">
+  <nav class="container mx-auto px-4 py-4 md:py-5 flex justify-between items-center">
     <div class="flex items-center gap-2">
-      <a
-        href="/"
-        class="text-2xl md:text-3xl font-black tracking-tight hover:text-red-100 transition duration-300 flex items-center gap-2"
-      >
-        <span class="text-3xl">🏠</span>
-        <span>AirBnb</span>
+      <a href="/" class="text-2xl md:text-3xl font-black tracking-tight hover:text-red-100 transition duration-300 flex items-center gap-2">
+        <span class="text-3xl">&#127968;</span><span>AirBnb</span>
       </a>
     </div>
-
-    <!-- Navigation Menu -->
     <ul class="hidden md:flex items-center space-x-1">
-      <% if(isLoggedIn){%> <% if(user && user.userType === 'guest'){%>
-      <li>
-        <a
-          href="/homes"
-          class="<%= currentPage === 'Home'? 'bg-red-500' : 'hover:bg-red-500'%> py-2 px-4 rounded-lg transition duration-300 font-medium text-sm"
-        >
-          <span class="mr-1">🏘️</span>Homes
-        </a>
-      </li>
-      <li>
-        <a
-          href="/favourites"
-          class="<%= currentPage === 'favourites'? 'bg-red-500' : 'hover:bg-red-500'%> py-2 px-4 rounded-lg transition duration-300 font-medium text-sm"
-        >
-          <span class="mr-1">❤️</span>Favourites
-        </a>
-      </li>
-      <li>
-        <a
-          href="/bookings"
-          class="<%= currentPage === 'bookings'? 'bg-red-500' : 'hover:bg-red-500'%> py-2 px-4 rounded-lg transition duration-300 font-medium text-sm"
-        >
-          <span class="mr-1">📅</span>Bookings
-        </a>
-      </li>
+      <% if(isLoggedIn){ %>
+      <% if(user && user.userType === 'guest'){ %>
+      <li><a href="/homes" class="<%= currentPage==='Home'?'bg-red-500':'hover:bg-red-500' %> py-2 px-4 rounded-lg transition duration-300 font-medium text-sm">&#127968; Homes</a></li>
+      <li><a href="/favourites" class="<%= currentPage==='favourites'?'bg-red-500':'hover:bg-red-500' %> py-2 px-4 rounded-lg transition duration-300 font-medium text-sm">&#10084;&#65039; Favourites</a></li>
+      <li><a href="/bookings" class="<%= currentPage==='bookings'?'bg-red-500':'hover:bg-red-500' %> py-2 px-4 rounded-lg transition duration-300 font-medium text-sm">&#128197; Bookings</a></li>
       <% } else if(user && user.userType === 'host'){ %>
-      <li>
-        <a
-          href="/host/host-home-list"
-          class="<%= currentPage === 'host-homes'? 'bg-red-500' : 'hover:bg-red-500'%> py-2 px-4 rounded-lg transition duration-300 font-medium text-sm"
-        >
-          <span class="mr-1">🔑</span>My Properties
-        </a>
-      </li>
-      <li>
-        <a
-          href="/host/add-home"
-          class="<%= currentPage === 'Add Home'? 'bg-red-500' : 'hover:bg-red-500'%> py-2 px-4 rounded-lg transition duration-300 font-medium text-sm"
-        >
-          <span class="mr-1">➕</span>Add Property
-        </a>
-      </li>
-      <% } %> <% } %>
+      <li><a href="/host/host-home-list" class="<%= currentPage==='host-homes'?'bg-red-500':'hover:bg-red-500' %> py-2 px-4 rounded-lg transition duration-300 font-medium text-sm">&#128273; My Properties</a></li>
+      <li><a href="/host/add-home" class="<%= currentPage==='Add Home'?'bg-red-500':'hover:bg-red-500' %> py-2 px-4 rounded-lg transition duration-300 font-medium text-sm">&#10133; Add Property</a></li>
+      <li><a href="/analytics/dashboard" class="<%= currentPage==='analytics'?'bg-red-500':'hover:bg-red-500' %> py-2 px-4 rounded-lg transition duration-300 font-medium text-sm">&#128202; Analytics</a></li>
+      <% } %>
+      <% } %>
     </ul>
-
-    <!-- Right Side Actions -->
     <div class="flex items-center space-x-2 md:space-x-3">
       <% if (!isLoggedIn) { %>
-      <a
-        href="/login"
-        class="py-2 px-4 rounded-lg hover:bg-red-500 transition duration-300 font-medium text-sm hidden sm:inline-block"
-      >
-        Login
-      </a>
-      <a
-        href="/signup"
-        class="bg-white text-red-600 py-2 px-4 rounded-lg hover:bg-red-50 transition duration-300 font-bold text-sm"
-      >
-        Sign Up
-      </a>
+      <a href="/login" class="py-2 px-4 rounded-lg hover:bg-red-500 transition duration-300 font-medium text-sm hidden sm:inline-block">Login</a>
+      <a href="/signup" class="bg-white text-red-600 py-2 px-4 rounded-lg hover:bg-red-50 transition duration-300 font-bold text-sm">Sign Up</a>
       <% } else { %>
-      <form action="/logout" method="POST" class="inline">
-        <button
-          type="submit"
-          class="bg-white text-red-600 py-2 px-4 rounded-lg hover:bg-red-50 transition duration-300 font-bold text-sm"
-        >
-          Logout
-        </button>
-      </form>
+      <form action="/logout" method="POST" class="inline"><button type="submit" class="bg-white text-red-600 py-2 px-4 rounded-lg hover:bg-red-50 transition duration-300 font-bold text-sm">Logout</button></form>
       <% } %>
     </div>
-
-    <!-- Mobile Menu Button (Optional - for future mobile menu) -->
-    <button
-      class="md:hidden text-white text-2xl hover:text-red-100 transition duration-300"
-    >
-      ☰
-    </button>
+    <button class="md:hidden text-white text-2xl hover:text-red-100 transition duration-300">&#9776;</button>
   </nav>
 </header>

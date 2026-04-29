@@ -1,0 +1,275 @@
+<%-include('../partials/head') %>
+  <body class="bg-gray-50">
+    <%- include('../partials/nav') %>
+    <main class="container mx-auto px-4 py-12">
+      <!-- Back Button -->
+      <a href="/homes/<%= home._id %>" class="inline-flex items-center gap-2 text-red-500 hover:text-red-600 font-semibold mb-8 transition duration-300">
+        ← Back to Property
+      </a>
+
+      <div class="max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- Left: Property Summary -->
+          <div class="bg-white rounded-2xl shadow-lg p-8 h-fit sticky top-4">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Property Details</h2>
+            
+            <div class="rounded-xl overflow-hidden mb-6">
+              <img src="/<%= home.photo.replace(/\\/g, '/') %>" alt="<%= home.houseName %>" class="w-full h-64 object-cover">
+            </div>
+
+            <h3 class="text-xl font-bold text-gray-900 mb-2"><%= home.houseName %></h3>
+            <p class="text-gray-600 mb-4 flex items-center gap-2">
+              <span>📍</span><%= home.location %>
+            </p>
+
+            <div class="flex items-center gap-4 mb-6">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">⭐</span>
+                <span class="font-bold"><%= home.rating %>/5</span>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-4">
+              <p class="text-sm text-gray-600">Price per night</p>
+              <p class="text-3xl font-bold text-red-600">$<%= home.price %></p>
+            </div>
+
+            <!-- Booking Summary (will update dynamically) -->
+            <div id="bookingSummary" class="mt-6 bg-blue-50 border-2 border-blue-200 rounded-xl p-4 hidden">
+              <h4 class="font-bold text-gray-900 mb-3">Booking Summary</h4>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span>Check-in:</span>
+                  <span id="summaryCheckIn" class="font-semibold">-</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Check-out:</span>
+                  <span id="summaryCheckOut" class="font-semibold">-</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Nights:</span>
+                  <span id="summaryNights" class="font-semibold">-</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Guests:</span>
+                  <span id="summaryGuests" class="font-semibold">-</span>
+                </div>
+                <div class="border-t border-blue-300 my-2"></div>
+                <div class="flex justify-between text-base font-bold">
+                  <span>Total:</span>
+                  <span id="summaryTotal" class="text-red-600">$0.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Booking Form -->
+          <div class="bg-white rounded-2xl shadow-lg p-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">📅 Book Your Stay</h2>
+
+            <form id="bookingForm" class="space-y-6">
+              <input type="hidden" id="homeId" value="<%= home._id %>">
+              <input type="hidden" id="pricePerNight" value="<%= home.price %>">
+
+              <!-- Check-in Date -->
+              <div>
+                <label for="checkIn" class="block text-sm font-bold text-gray-700 mb-2">
+                  Check-in Date
+                </label>
+                <input type="date" id="checkIn" name="checkIn" required
+                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none text-lg"
+                  min="<%= new Date().toISOString().split('T')[0] %>">
+              </div>
+
+              <!-- Check-out Date -->
+              <div>
+                <label for="checkOut" class="block text-sm font-bold text-gray-700 mb-2">
+                  Check-out Date
+                </label>
+                <input type="date" id="checkOut" name="checkOut" required
+                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none text-lg"
+                  min="<%= new Date().toISOString().split('T')[0] %>">
+              </div>
+
+              <!-- Number of Guests -->
+              <div>
+                <label for="guests" class="block text-sm font-bold text-gray-700 mb-2">
+                  Number of Guests
+                </label>
+                <input type="number" id="guests" name="guests" min="1" max="10" value="2" required
+                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none text-lg">
+              </div>
+
+              <!-- Special Requests -->
+              <div>
+                <label for="specialRequests" class="block text-sm font-bold text-gray-700 mb-2">
+                  Special Requests (Optional)
+                </label>
+                <textarea id="specialRequests" name="specialRequests" rows="3"
+                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none resize-none"
+                  placeholder="Any special requests or requirements?"></textarea>
+              </div>
+
+              <!-- Availability Check -->
+              <button type="button" id="checkAvailabilityBtn"
+                class="w-full bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600 transition duration-300 shadow-lg hover:shadow-xl">
+                🔍 Check Availability
+              </button>
+
+              <!-- Availability Message -->
+              <div id="availabilityMessage" class="hidden"></div>
+
+              <!-- Book Button -->
+              <button type="submit" id="bookBtn" disabled
+                class="w-full bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold py-4 px-6 rounded-lg hover:from-red-600 hover:to-orange-600 transition duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                ✈️ Confirm Booking
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const homeId = document.getElementById('homeId').value;
+      const pricePerNight = parseFloat(document.getElementById('pricePerNight').value);
+      const checkInInput = document.getElementById('checkIn');
+      const checkOutInput = document.getElementById('checkOut');
+      const guestsInput = document.getElementById('guests');
+      const checkAvailabilityBtn = document.getElementById('checkAvailabilityBtn');
+      const bookBtn = document.getElementById('bookBtn');
+      const availabilityMessage = document.getElementById('availabilityMessage');
+      const bookingSummary = document.getElementById('bookingSummary');
+      const bookingForm = document.getElementById('bookingForm');
+
+      let isAvailable = false;
+
+      // Update booking summary
+      function updateSummary() {
+        const checkIn = checkInInput.value;
+        const checkOut = checkOutInput.value;
+        const guests = guestsInput.value;
+
+        if (checkIn && checkOut) {
+          const checkInDate = new Date(checkIn);
+          const checkOutDate = new Date(checkOut);
+          const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+
+          if (nights > 0) {
+            const total = nights * pricePerNight;
+            
+            document.getElementById('summaryCheckIn').textContent = checkInDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            document.getElementById('summaryCheckOut').textContent = checkOutDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            document.getElementById('summaryNights').textContent = nights;
+            document.getElementById('summaryGuests').textContent = guests;
+            document.getElementById('summaryTotal').textContent = '$' + total.toFixed(2);
+            
+            bookingSummary.classList.remove('hidden');
+          }
+        }
+      }
+
+      // Event listeners for date changes
+      [checkInInput, checkOutInput, guestsInput].forEach(input => {
+        input.addEventListener('change', () => {
+          updateSummary();
+          isAvailable = false;
+          bookBtn.disabled = true;
+          availabilityMessage.classList.add('hidden');
+        });
+      });
+
+      // Check availability
+      checkAvailabilityBtn.addEventListener('click', async () => {
+        const checkIn = checkInInput.value;
+        const checkOut = checkOutInput.value;
+
+        if (!checkIn || !checkOut) {
+          alert('Please select check-in and check-out dates');
+          return;
+        }
+
+        checkAvailabilityBtn.disabled = true;
+        checkAvailabilityBtn.textContent = '⏳ Checking...';
+
+        try {
+          const response = await fetch('/booking/availability', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ homeId, checkIn, checkOut })
+          });
+
+          const data = await response.json();
+
+          availabilityMessage.classList.remove('hidden');
+          
+          if (data.success && data.available) {
+            isAvailable = true;
+            bookBtn.disabled = false;
+            availabilityMessage.className = 'bg-green-50 border-2 border-green-200 rounded-lg p-4 text-green-800';
+            availabilityMessage.innerHTML = '✅ <strong>Great news!</strong> This property is available for your selected dates.';
+          } else {
+            isAvailable = false;
+            bookBtn.disabled = true;
+            availabilityMessage.className = 'bg-red-50 border-2 border-red-200 rounded-lg p-4 text-red-800';
+            availabilityMessage.innerHTML = '❌ <strong>Sorry!</strong> This property is not available for the selected dates. Please choose different dates.';
+          }
+        } catch (error) {
+          console.error(error);
+          availabilityMessage.classList.remove('hidden');
+          availabilityMessage.className = 'bg-red-50 border-2 border-red-200 rounded-lg p-4 text-red-800';
+          availabilityMessage.innerHTML = '⚠️ <strong>Error:</strong> Unable to check availability. Please try again.';
+        } finally {
+          checkAvailabilityBtn.disabled = false;
+          checkAvailabilityBtn.textContent = '🔍 Check Availability';
+        }
+      });
+
+      // Submit booking
+      bookingForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (!isAvailable) {
+          alert('Please check availability first');
+          return;
+        }
+
+        const formData = {
+          homeId: homeId,
+          checkIn: checkInInput.value,
+          checkOut: checkOutInput.value,
+          guests: parseInt(guestsInput.value),
+          pricePerNight: pricePerNight,
+          specialRequests: document.getElementById('specialRequests').value
+        };
+
+        bookBtn.disabled = true;
+        bookBtn.textContent = '⏳ Creating Booking...';
+
+        try {
+          const response = await fetch('/booking/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            alert('🎉 Booking created successfully!');
+            window.location.href = '/bookings/' + data.bookingId;
+          } else {
+            alert('Error: ' + data.error);
+            bookBtn.disabled = false;
+            bookBtn.textContent = '✈️ Confirm Booking';
+          }
+        } catch (error) {
+          console.error(error);
+          alert('Failed to create booking. Please try again.');
+          bookBtn.disabled = false;
+          bookBtn.textContent = '✈️ Confirm Booking';
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,116 +1,64 @@
-//core module
-const path = require("path");
+"use strict";
 require("dotenv").config();
-//external modules
+
+const path = require("path");
 const express = require("express");
-const session = require("express-session");
-const MongoDBStore = require("connect-mongodb-session")(session);
-const { default: mongoose } = require("mongoose");
-const multer = require("multer");
-const DB_PATH = process.env.MONGODB_URI || "mongodb://localhost:27017/airbnb";
-//Local modules
-const storeRouter = require("./routers/storeRouter");
-const hostRouter = require("./routers/hostRouter");
-const authRouter = require("./routers/authRouter");
-const rootDIR = require("./util/pathUtil");
-const errorsController = require("./controllers/errors");
-//const { mongoConnect } = require("./util/databaseUtil");
+
+// Config
+const { connectDB } = require("./src/config/database");
+const sessionMiddleware = require("./src/config/session");
+const upload = require("./src/config/multer");
+
+// Middleware
+const { attachUser, requireAuth } = require("./src/middleware/auth");
+const { pageNotFound, globalErrorHandler } = require("./src/middleware/errorHandler");
+
+// Routes
+const authRoutes     = require("./src/routes/authRoutes");
+const storeRoutes    = require("./src/routes/storeRoutes");
+const hostRoutes     = require("./src/routes/hostRoutes");
+const bookingRoutes  = require("./src/routes/bookingRoutes");
+const analyticsRoutes = require("./src/routes/analyticsRoutes");
 
 const app = express();
 
+// ─── View Engine ──────────────────────────────────────────────────────────────
 app.set("view engine", "ejs");
-app.set("views", "views");
+app.set("views", path.join(__dirname, "views"));
 
-const store = new MongoDBStore({
-  uri: DB_PATH,
-  collection: "sessions",
-});
+// ─── Static Assets ────────────────────────────────────────────────────────────
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-const randomString = (length) => {
-  const characters = "abcdefghijklmnopqrstuvwxyz";
-  let result = "";
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
-};
+// ─── Body Parsers ─────────────────────────────────────────────────────────────
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());              // required for AJAX booking endpoints
+app.use(upload.single("photo"));
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, randomString(10) + "-" + file.originalname);
-  },
-});
+// ─── Session ─────────────────────────────────────────────────────────────────
+app.use(sessionMiddleware);
 
-const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpeg"
-  ) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
+// ─── Auth Context ─────────────────────────────────────────────────────────────
+app.use(attachUser);
 
-const multerOptions = {
-  storage,
-  fileFilter,
-};
+// ─── Routes ──────────────────────────────────────────────────────────────────
+app.use(authRoutes);
+app.use(storeRoutes);
+app.use(bookingRoutes);                      // /book/:homeId, /bookings, /booking/*
+app.use("/host",      requireAuth, hostRoutes);
+app.use("/analytics", analyticsRoutes);      // guards are inside analyticsRoutes
 
-app.use(express.urlencoded()); //middleware to parse form data
-app.use(multer(multerOptions).single("photo"));
-app.use(express.static(path.join(rootDIR, "public")));
-app.use("/uploads", express.static(path.join(rootDIR, "uploads")));
-app.use("/host/uploads", express.static(path.join(rootDIR, "uploads")));
-app.use("/homes/uploads", express.static(path.join(rootDIR, "uploads")));
+// ─── Error Handling ───────────────────────────────────────────────────────────
+app.use(pageNotFound);
+app.use(globalErrorHandler);
 
-app.use(
-  session({
-    secret: "Airbnb Webpage",
-    resave: false,
-    saveUnintialized: true,
-    store: store,
-  })
-);
-app.use((req, res, next) => {
-  // req.isLoggedIn = req.get("Cookie")
-  //   ? req.get("Cookie").split("=")[1] === "true"
-  //   : false;
-  req.isLoggedIn = req.session.isLoggedIn;
-  next();
-});
-
-app.use(authRouter);
-app.use(storeRouter);
-app.use("/host", (req, res, next) => {
-  if (!req.isLoggedIn) {
-    return res.redirect("/login");
-  }
-  next();
-});
-app.use("/host", hostRouter);
-
-app.use(errorsController.pageNotFound);
-
+// ─── Start Server ─────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
-// mongoConnect(() => {
-//   app.listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}`);
-//   });
-// });
 
-mongoose
-  .connect(DB_PATH)
-  .then(() => {
-    console.log("Connected to Mongo");
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.log("Error while connecting to mongo:", err);
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
   });
+});
+
+module.exports = app;
