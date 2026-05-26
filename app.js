@@ -29,6 +29,9 @@ app.set("views", path.join(__dirname, "views"));
 // ─── Static Assets ────────────────────────────────────────────────────────────
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/host/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/homes/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/book/uploads", express.static(path.join(__dirname, "uploads")));
 
 // ─── Body Parsers ─────────────────────────────────────────────────────────────
 app.use(express.urlencoded({ extended: true }));
