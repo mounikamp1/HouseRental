@@ -1,4 +1,4 @@
-# HouseRental — Airbnb-Style Property Rental Platform
+# HouseRental ï¿½ Airbnb-Style Property Rental Platform
 
 [![Demo Video](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
 
@@ -6,20 +6,20 @@ Link to demo video: https://www.youtube.com/watch?v=YOUR_VIDEO_ID
 
 ## About
 
-HouseRental is a full-stack property rental platform — guests can browse, favourite, and book properties while hosts manage listings and track revenue. The booking engine runs on a dedicated **Java Spring Boot microservice**, showing the **Strangler Fig migration pattern** in action: progressively replacing the original Node.js booking code with a purpose-built Java service, without any downtime.
+HouseRental is a full-stack property rental platform ï¿½ guests can browse, favourite, and book properties while hosts manage listings and track revenue. The booking engine runs on a dedicated **Java Spring Boot microservice**, showing the **Strangler Fig migration pattern** in action: progressively replacing the original Node.js booking code with a purpose-built Java service, without any downtime.
 
 ## Screenshots
 
-| Home Page | Property Listing |
-|---|---|
+| Home Page                          | Property Listing                                           |
+| ---------------------------------- | ---------------------------------------------------------- |
 | ![Home](docs/screenshots/home.png) | ![Property Listing](docs/screenshots/property-listing.png) |
 
-| Property Detail | Booking Form |
-|---|---|
+| Property Detail                                          | Booking Form                                       |
+| -------------------------------------------------------- | -------------------------------------------------- |
 | ![Property Detail](docs/screenshots/property-detail.png) | ![Booking Form](docs/screenshots/booking-form.png) |
 
-| Host Dashboard | Analytics |
-|---|---|
+| Host Properties                                          | Analytics                                              |
+| -------------------------------------------------------- | ------------------------------------------------------ |
 | ![Host Properties](docs/screenshots/host-properties.png) | ![Analytics](docs/screenshots/analytics-dashboard.png) |
 
 ## Tech Stack
@@ -41,7 +41,7 @@ HouseRental is a full-stack property rental platform — guests can browse, favour
 
 ## Getting Started
 
-### Option A — Docker Compose (Recommended)
+### Option A ï¿½ Docker Compose (Recommended)
 
 Requires [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
@@ -51,22 +51,22 @@ cd HouseRental
 docker-compose up -d --build
 ```
 
-| Service | URL |
-|---|---|
-| Node.js App | http://localhost:5000 |
-| Booking API | http://localhost:8080/api/bookings |
+| Service      | URL                                   |
+| ------------ | ------------------------------------- |
+| Node.js App  | http://localhost:5000                 |
+| Booking API  | http://localhost:8080/api/bookings    |
 | Health Check | http://localhost:8080/actuator/health |
 
-### Option B — Run Locally
+### Option B ï¿½ Run Locally
 
 **Prerequisites:** Node.js 18+, Java 25 JDK, Maven 3.9+, MongoDB running on `localhost:27017`
 
 ```bash
-# Terminal 1 — start the Java booking microservice
+# Terminal 1 ï¿½ start the Java booking microservice
 cd booking-service
 mvn clean spring-boot:run
 
-# Terminal 2 — start the Node.js app
+# Terminal 2 ï¿½ start the Node.js app
 npm install
 npm run dev
 ```
@@ -83,19 +83,19 @@ BOOKING_SERVICE_URL=http://localhost:8080/api/bookings
 
 ## Resources and Links
 
-### API Reference — Booking Microservice
+### API Reference ï¿½ Booking Microservice
 
 Base URL: `http://localhost:8080/api/bookings`
 
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/` | Create a booking |
-| `GET` | `/user/{userId}` | All bookings for a user |
-| `GET` | `/user/{userId}/upcoming` | Upcoming bookings |
-| `POST` | `/availability` | Check date availability |
-| `PATCH` | `/{id}/confirm` | Confirm a booking |
-| `PATCH` | `/{id}/cancel` | Cancel a booking |
-| `DELETE` | `/{id}` | Delete a booking |
+| Method   | Endpoint                  | Description             |
+| -------- | ------------------------- | ----------------------- |
+| `POST`   | `/`                       | Create a booking        |
+| `GET`    | `/user/{userId}`          | All bookings for a user |
+| `GET`    | `/user/{userId}/upcoming` | Upcoming bookings       |
+| `POST`   | `/availability`           | Check date availability |
+| `PATCH`  | `/{id}/confirm`           | Confirm a booking       |
+| `PATCH`  | `/{id}/cancel`            | Cancel a booking        |
+| `DELETE` | `/{id}`                   | Delete a booking        |
 
 ### Run Tests
 
@@ -107,13 +107,13 @@ mvn clean test
 
 ### Strangler Fig Migration Status
 
-Live migration state visible at `/actuator/health` — no need to read config files:
+Live migration state visible at `/actuator/health` ï¿½ no need to read config files:
 
 ```
 GET http://localhost:8080/actuator/health
 ```
 
-Current phase: **PHASE_3_CUTOVER** — 100% of booking traffic served by the Java microservice.
+Current phase: **PHASE_3_CUTOVER** ï¿½ 100% of booking traffic served by the Java microservice.
 
 ```
 PHASE_1_SHADOW   ? Java runs silently alongside Node.js
